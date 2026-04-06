@@ -1,0 +1,277 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main()
+{
+
+//variaveis do jogo 1:
+int jogo;
+
+//variaveis do jogo 2:
+int furiaA1 = 1, furiaB1 = 1;
+int furiaA2 = 1, furiaB2 = 1;
+
+int vivaA1 = 1, vivaB1 = 1; 
+int vivaA2 = 1, vivaB2 = 1;
+
+int vez = 1;
+int acao;
+int ataque;
+int defesa;
+int valor;
+int fim = 0;
+int repete = 0;
+int jogar = 1;
+
+// nomes (usado no jogo 2)
+char nomes[7][20] = {
+    "Cleiton", "Naruto", "Sasuke", "Messi",
+    "Gabigol", "Zico", "Guerreiro"
+};
+
+int escolha1, escolha2;
+
+do {
+    printf("\n  Menu de Jogos  \n");
+    printf("1 - Perguntas e Respostas\n");
+    printf("2 - Cobra na Caixa\n");
+    printf("3 - Gousmas War\n");
+    printf("4 - Sair\n");
+
+    scanf("%d", &jogo);
+
+    switch(jogo) {
+
+      
+        case 1: {
+            int resp;
+            int opcao;
+            int pts;
+
+            do {
+                pts = 0;
+
+                printf("\n=== PERGUNTAS E RESPOSTAS ===\n");
+
+                printf("\nPergunta 1: Qual a capital do Amazonas?\n");
+                printf("1 - Parintins\n2 - Belem\n3 - Manaus\n4 - Rio Branco\n");
+                scanf("%d", &resp);
+
+                if(resp == 3) { pts++; printf("Resposta certa\n"); }
+                else printf("Errado, a resposta e: Manaus\n");
+
+                printf("\nPergunta 2: Quantos dedos tem uma pessoa?\n");
+                printf("1 - 19\n2 - 20\n3 - 18\n4 - 21\n");
+                scanf("%d", &resp);
+
+                if(resp == 2) { pts++; printf("Resposta certa\n"); }
+                else printf("Errado, a resposta e: 20\n");
+
+                printf("\nPergunta 3: Qual o ano atual?\n");
+                printf("1 - 2025\n2 - 2027\n3 - 2026\n4 - 2028\n");
+                scanf("%d", &resp);
+
+                if(resp == 3) { pts++; printf("Resposta certa\n"); }
+                else printf("Errado, a resposta e: 2026\n");
+
+                printf("\nPergunta 4: Quantos dias tem um ano comum?\n");
+                printf("1 - 365\n2 - 366\n3 - 360\n4 - 300\n");
+                scanf("%d", &resp);
+
+                if(resp == 1) { pts++; printf("Resposta certa\n"); }
+                else printf("Errado, a resposta e: 365\n");
+
+                printf("\nPergunta 5: Quanto e 3 x 3?\n");
+                printf("1 - 6\n2 - 9\n3 - 12\n4 - 3\n");
+                scanf("%d", &resp);
+
+                if(resp == 2) { pts++; printf("Resposta certa\n"); }
+                else printf("Errado, a resposta e: 9\n");
+
+                printf("\nVoce acertou %d de 5 \n", pts);
+
+                printf("-Digite um numero acima de 0 para jogar novamente\n");
+                printf("-Digite 0 para voltar ao menu\n");
+                scanf("%d", &opcao);
+
+            } while(opcao != 0);
+
+            break;
+        }
+
+        
+        case 2: {
+            int jogarNovamente = 1;
+
+            while (jogarNovamente == 1) {
+
+                printf("\n=== COBRA NA CAIXA ===\n");
+
+                printf("\nEscolha o nome do Jogador 1:\n");
+                printf("1-Cleiton  2-Naruto  3-Sasuke  4-Messi  5-Gabigol  6-Zico  7-Guerreiro\n");
+                scanf("%d", &escolha1);
+
+                while (escolha1 < 1 || escolha1 > 7) {
+                    printf("Escolha invalida:\n");
+                    scanf("%d", &escolha1);
+                }
+
+                printf("Escolha o nome do Jogador 2:\n");
+                scanf("%d", &escolha2);
+
+                while (escolha2 < 1 || escolha2 > 7 || escolha2 == escolha1) {
+                    printf("Escolha invalida:\n");
+                    scanf("%d", &escolha2);
+                }
+
+                int caixaBotao, caixaCobra;
+                int caixasAbertas[5] = {0,0,0,0,0};
+                int jogadorAtual;
+                int escolha;
+                int jogoAcabou = 0;
+
+                srand(time(NULL));
+
+                caixaBotao = rand() % 5;
+
+                caixaCobra = rand() % 5;
+                while (caixaCobra == caixaBotao) {
+                    caixaCobra = rand() % 5;
+                }
+
+                jogadorAtual = rand() % 2;
+
+                while (jogoAcabou == 0) {
+
+                    if (jogadorAtual == 0)
+                        printf("\nVez de %s\n", nomes[escolha1 - 1]);
+                    else
+                        printf("\nVez de %s\n", nomes[escolha2 - 1]);
+
+                    printf("Escolha uma caixa (1 a 5): ");
+                    scanf("%d", &escolha);
+
+                    escolha--;
+
+                    if (escolha < 0 || escolha > 4) {
+                        printf("Escolha invalida\n");
+                    }
+                    else if (caixasAbertas[escolha] == 1) {
+                        printf("Essa caixa ja foi aberta\n");
+                    }
+                    else {
+
+                        caixasAbertas[escolha] = 1;
+
+                        if (escolha == caixaBotao) {
+
+                            if (jogadorAtual == 0)
+                                printf("%s ACHOU O BOTAO E VENCEU\n", nomes[escolha1 - 1]);
+                            else
+                                printf("%s ACHOU O BOTAO E VENCEU\n", nomes[escolha2 - 1]);
+
+                            jogoAcabou = 1;
+                        }
+                        else if (escolha == caixaCobra) {
+
+                            if (jogadorAtual == 0)
+                                printf("%s ENCONTROU A COBRA E PERDEU\n", nomes[escolha1 - 1]);
+                            else
+                                printf("%s ENCONTROU A COBRA E PERDEU\n", nomes[escolha2 - 1]);
+
+                            jogoAcabou = 1;
+                        }
+                        else {
+                            printf("Caixa vazia\n");
+
+                            jogadorAtual = (jogadorAtual == 0) ? 1 : 0;
+                        }
+                    }
+                }
+
+                printf("\n1 - Jogar novamente\n2 - Voltar ao menu\n");
+                scanf("%d", &jogarNovamente);
+
+                while (jogarNovamente != 1 && jogarNovamente != 2) {
+                    printf("Opcao invalida:\n");
+                    scanf("%d", &jogarNovamente);
+                }
+
+                if (jogarNovamente == 2)
+                    jogarNovamente = 0;
+            }
+
+            break;
+        }
+
+        
+        case 3:
+
+            while(repete < 1){
+                printf("Digite 1 para comecar:\n");
+                scanf("%d", &repete);
+            }
+
+            while (jogar == 1) {
+
+                while (fim == 0) {
+
+                    printf("\nVez do jogador: %d\n", vez);
+
+                    printf("A1:%d A2:%d | B1:%d B2:%d\n",
+                        furiaA1, furiaA2, furiaB1, furiaB2);
+
+                    printf("1-Atacar 2-Dividir\n");
+                    scanf("%d", &acao);
+
+                    if (acao == 1) {
+                        scanf("%d %d", &ataque, &defesa);
+
+                        if (vez == 1) {
+                            if (ataque == 1) furiaB1 += furiaA1;
+                            if (ataque == 2) furiaB2 += furiaA2;
+                        } else {
+                            if (ataque == 1) furiaA1 += furiaB1;
+                            if (ataque == 2) furiaA2 += furiaB2;
+                        }
+                    }
+
+                    if (acao == 2) {
+                        scanf("%d %d %d", &ataque, &defesa, &valor);
+                    }
+
+                    if (furiaA1 > 5) vivaA1 = 0;
+                    if (furiaA2 > 5) vivaA2 = 0;
+                    if (furiaB1 > 5) vivaB1 = 0;
+                    if (furiaB2 > 5) vivaB2 = 0;
+
+                    if (vivaA1 == 0 && vivaA2 == 0) { printf("Jogador 2 venceu\n"); fim = 1; }
+                    if (vivaB1 == 0 && vivaB2 == 0) { printf("Jogador 1 venceu\n"); fim = 1; }
+
+                    vez = (vez == 1) ? 2 : 1;
+                }
+
+                printf("\n1-Jogar novamente 2-Sair\n");
+                scanf("%d", &jogar);
+
+                furiaA1 = furiaA2 = furiaB1 = furiaB2 = 1;
+                vivaA1 = vivaA2 = vivaB1 = vivaB2 = 1;
+                vez = 1;
+                fim = 0;
+            }
+
+            break;
+
+        case 4:
+            printf("Saindo...\n");
+            break;
+
+        default:
+            printf("Opcao invalida\n");
+    }
+
+} while(jogo != 4);
+
+return 0;
+}
