@@ -208,60 +208,139 @@ do {
         
         case 3:
 
-            while(repete < 1){
-                printf("Digite 1 para comecar:\n");
-                scanf("%d", &repete);
-            }
+    repete = 0;
 
-            while (jogar == 1) {
+    while(repete < 1){
+        printf("Digite 1 para comecar:\n");
+        scanf("%d", &repete);
+    }
 
-                while (fim == 0) {
+    while (jogar == 1) {
 
-                    printf("\nVez do jogador: %d\n", vez);
+        while (fim == 0) {
 
-                    printf("A1:%d A2:%d | B1:%d B2:%d\n",
-                        furiaA1, furiaA2, furiaB1, furiaB2);
+            printf("\nVez do jogador: %d\n", vez);
 
-                    printf("1-Atacar 2-Dividir\n");
-                    scanf("%d", &acao);
+            printf("A1:%d A2:%d | B1:%d B2:%d\n",
+                furiaA1, furiaA2, furiaB1, furiaB2);
 
-                    if (acao == 1) {
-                        scanf("%d %d", &ataque, &defesa);
+            printf("1-Atacar 2-Dividir\n");
+            scanf("%d", &acao);
 
-                        if (vez == 1) {
-                            if (ataque == 1) furiaB1 += furiaA1;
-                            if (ataque == 2) furiaB2 += furiaA2;
-                        } else {
-                            if (ataque == 1) furiaA1 += furiaB1;
-                            if (ataque == 2) furiaA2 += furiaB2;
-                        }
-                    }
+            if (acao == 1) {
 
-                    if (acao == 2) {
-                        scanf("%d %d %d", &ataque, &defesa, &valor);
-                    }
+                printf("Escolha sua gousma (1 ou 2) e a do inimigo (1 ou 2):\n");
+                scanf("%d %d", &ataque, &defesa);
 
-                    if (furiaA1 > 5) vivaA1 = 0;
-                    if (furiaA2 > 5) vivaA2 = 0;
-                    if (furiaB1 > 5) vivaB1 = 0;
-                    if (furiaB2 > 5) vivaB2 = 0;
-
-                    if (vivaA1 == 0 && vivaA2 == 0) { printf("Jogador 2 venceu\n"); fim = 1; }
-                    if (vivaB1 == 0 && vivaB2 == 0) { printf("Jogador 1 venceu\n"); fim = 1; }
-
-                    vez = (vez == 1) ? 2 : 1;
+                // validação
+                if (ataque < 1 || ataque > 2 || defesa < 1 || defesa > 2) {
+                    printf("Escolha invalida\n");
+                    continue;
                 }
 
-                printf("\n1-Jogar novamente 2-Sair\n");
-                scanf("%d", &jogar);
+                if (vez == 1) {
+                    if ((ataque == 1 && vivaA1 == 0) || (ataque == 2 && vivaA2 == 0)) {
+                        printf("Sua gousma esta morta\n");
+                        continue;
+                    }
+                    if ((defesa == 1 && vivaB1 == 0) || (defesa == 2 && vivaB2 == 0)) {
+                        printf("Gousma inimiga morta\n");
+                        continue;
+                    }
 
-                furiaA1 = furiaA2 = furiaB1 = furiaB2 = 1;
-                vivaA1 = vivaA2 = vivaB1 = vivaB2 = 1;
-                vez = 1;
-                fim = 0;
+                    if (ataque == 1 && defesa == 1) furiaB1 += furiaA1;
+                    if (ataque == 1 && defesa == 2) furiaB2 += furiaA1;
+                    if (ataque == 2 && defesa == 1) furiaB1 += furiaA2;
+                    if (ataque == 2 && defesa == 2) furiaB2 += furiaA2;
+
+                } else {
+
+                    if ((ataque == 1 && vivaB1 == 0) || (ataque == 2 && vivaB2 == 0)) {
+                        printf("Sua gousma esta morta\n");
+                        continue;
+                    }
+                    if ((defesa == 1 && vivaA1 == 0) || (defesa == 2 && vivaA2 == 0)) {
+                        printf("Gousma inimiga morta\n");
+                        continue;
+                    }
+
+                    if (ataque == 1 && defesa == 1) furiaA1 += furiaB1;
+                    if (ataque == 1 && defesa == 2) furiaA2 += furiaB1;
+                    if (ataque == 2 && defesa == 1) furiaA1 += furiaB2;
+                    if (ataque == 2 && defesa == 2) furiaA2 += furiaB2;
+                }
             }
 
-            break;
+            else if (acao == 2) {
+
+                printf("Escolha qual dividir (1 ou 2), destino (1 ou 2) e valor:\n");
+                scanf("%d %d %d", &ataque, &defesa, &valor);
+
+                if (ataque < 1 || ataque > 2 || defesa < 1 || defesa > 2 || valor < 1) {
+                    printf("Valor invalido\n");
+                    continue;
+                }
+
+                if (vez == 1) {
+
+                    int *origem = (ataque == 1) ? &furiaA1 : &furiaA2;
+                    int *destino = (defesa == 1) ? &furiaA1 : &furiaA2;
+                    int *vivoDestino = (defesa == 1) ? &vivaA1 : &vivaA2;
+
+                    if (*origem <= valor) {
+                        printf("Nao pode zerar a gousma\n");
+                        continue;
+                    }
+
+                    *origem -= valor;
+                    *destino += valor;
+                    *vivoDestino = 1;
+
+                } else {
+
+                    int *origem = (ataque == 1) ? &furiaB1 : &furiaB2;
+                    int *destino = (defesa == 1) ? &furiaB1 : &furiaB2;
+                    int *vivoDestino = (defesa == 1) ? &vivaB1 : &vivaB2;
+
+                    if (*origem <= valor) {
+                        printf("Nao pode zerar a gousma\n");
+                        continue;
+                    }
+
+                    *origem -= valor;
+                    *destino += valor;
+                    *vivoDestino = 1;
+                }
+            }
+
+            else {
+                printf("Opcao invalida\n");
+                continue;
+            }
+
+            // verificar mortes
+            if (furiaA1 > 5) vivaA1 = 0;
+            if (furiaA2 > 5) vivaA2 = 0;
+            if (furiaB1 > 5) vivaB1 = 0;
+            if (furiaB2 > 5) vivaB2 = 0;
+
+            // condição de vitória
+            if (vivaA1 == 0 && vivaA2 == 0) { printf("Jogador 2 venceu\n"); fim = 1; }
+            if (vivaB1 == 0 && vivaB2 == 0) { printf("Jogador 1 venceu\n"); fim = 1; }
+
+            vez = (vez == 1) ? 2 : 1;
+        }
+
+        printf("\n1-Jogar novamente 2-Sair\n");
+        scanf("%d", &jogar);
+
+        furiaA1 = furiaA2 = furiaB1 = furiaB2 = 1;
+        vivaA1 = vivaA2 = vivaB1 = vivaB2 = 1;
+        vez = 1;
+        fim = 0;
+    }
+
+    break;
 
         case 4:
             printf("Saindo...\n");
